@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
-import { QueryBuilder} from '@mui/icons-material';
+import { QueryBuilder, DeleteOutline, EditOutlined } from '@mui/icons-material';
+import swal from 'sweetalert';
+
+// export const TaskContext = createContext()
 
 export const Task = props =>{
 
@@ -9,12 +12,19 @@ export const Task = props =>{
     // Necesito usar un onClick para cambiar el valor de una booleana "editar"
     // La card y el contenido cambiará cuando la booleana "editar" este a true.
     // La etiqueta / notificación 
+    // Cambiar que en vez de tener los botones de borrar y editar arriba, sean iconos dentro de la propia card
 
     const [ edit, setEdit ] = useState(false)
 
     const [ completeTask, setCompleteTask ] = useState(false)
 
     const [ fewdays, setFewDays ] = useState(false)
+
+    const [ idTask, setIdTask ] = useState(1)
+
+    // Necesito una bool que tengo que pasar al funcionalities y ahí dependiendo del valor que tenga la bool sacar unos componentes u otros
+    // Para interactuar con una tarea igual necesitaría cambiar de ruta. -> a /task/:id 
+    // Ya tengo la lista de tareas. Puedo simplemente que cunado le de click saque el valor de id
 
     const due = 2
 
@@ -31,7 +41,7 @@ export const Task = props =>{
         flexDirection: 'column',
         height: 300,
         justifyContent: 'space-between',
-        padding: 15,
+        padding: 10,
         borderRadius: 6,
         border: 'solid 1px gray',
         backgroundColor: '#FFFFFF'
@@ -41,7 +51,7 @@ export const Task = props =>{
         flexDirection: 'column',
         height: 300,
         justifyContent: 'space-between',
-        padding: 15,
+        padding: 10,
         borderRadius: 6,
         border: 'solid 1.5px blue',
         backgroundColor: '#FFFFFF'
@@ -76,10 +86,46 @@ export const Task = props =>{
         paddingTop: 50
     }
 
+    const descriptionStyle = {
+        maxHeight: 150,
+        overflowY: 'scroll',
+        fontSize: 20,
+        wordWrap: 'break-word'
+    }
+
+    const iconsStyle = {
+        fontSize: 32, 
+        cursor: 'pointer',
+        '&:hover': {
+            color: 'blue'
+        }
+    }
+
+    const showDelete = () => {
+        setEdit(false)
+        swal({
+            title: "Are you sure?",
+            text: "Task will be deleted",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+        })
+        .then((willDelete) => {
+            console.log(willDelete);
+            if ( willDelete ) {
+                swal("Poof! Task has been deleted successfully", {
+                    icon: "success",
+                })
+                // Aquí llamaré al metodo del TaskService
+                .then (res => window.location.href="/")
+            }
+        });
+    }
+
     return(
         <div style={tasks}>
             {!edit ? 
-            <Card style={taskStyle1} onClick={() => setEdit(!edit)}>
+            <Card style={taskStyle1} onClick={() => { setEdit(!edit); setIdTask(props.id) }}>
                 {fewdays && 
                     <CardHeader style={alertStyle}
                     subheader={`Due in ${due} days`}
@@ -89,7 +135,7 @@ export const Task = props =>{
                 />
                 }
                 <CardContent style={{margin: 3}}>
-                    <Typography gutterBottom variant="h4" component="h2">
+                    <Typography variant="h4" component="h2">
                         <b>{props.name}</b>
                     </Typography>
                     {!completeTask ?
@@ -110,14 +156,24 @@ export const Task = props =>{
                 <CardHeader style={alertStyle}
                     subheader={`Due in ${due} days`}
                     action={
-                        <QueryBuilder style={{color: 'orange'}} />
+                        <>
+                        <QueryBuilder sx={{color: 'orange'}} />
+                        </>
                     }
-                />
+                >
+                </CardHeader>
                 <CardContent style={{margin: 3}}>
-                    <Typography gutterBottom variant="h4" component="h2">
+                    
+                    <Typography variant="h4" component="h2" style={{display: 'flex', flexDirection: 'row' ,justifyContent: 'space-between'}}>
                         <b>{props.name}</b>
+                        <div>
+                            <EditOutlined sx={{ "&:hover": { color: "black" }, fontSize: 30, cursor: 'pointer', color: 'gray' }} 
+                            onClick={() => console.log('Función editTask')} />
+                            <DeleteOutline sx={{ "&:hover": { color: "red" }, fontSize: 30, cursor: 'pointer', color: 'gray' }} 
+                            onClick={() => showDelete()} />
+                        </div>
                     </Typography>
-                    <Typography style={{fontSize: 20, wordWrap: 'break-word'}} color="textSecondary" component="p">
+                    <Typography style={descriptionStyle} color="textSecondary" component="p">
                         {props.description}
                     </Typography>
                 </CardContent>
@@ -126,6 +182,7 @@ export const Task = props =>{
                 </Typography>
             </Card>
             }
+            {/* <TaskContext.Provider value={[idTask, edit]}>{props.children}</TaskContext.Provider> */}
         </div>
     )
 }

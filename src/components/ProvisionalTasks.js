@@ -24,7 +24,7 @@ export const ProvisionalTasks = ()=>{
         <div style={tasks} >
    
                 {data.map((task) => 
-                    <Task name={task.name} description={task.description}/>
+                    <Task id={task.id} name={task.name} description={task.description}/>
                     //    <div style={taskStyles}>
                     //    <h2>{task.name}</h2>
                     //    <p style={{width:'300px'}}> {task.description} </p>

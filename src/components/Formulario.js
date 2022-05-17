@@ -9,26 +9,15 @@ import './Formulario.css'
 import {getTask}  from './../services/TaskService'
 import { postForm } from "../hooks/postForm";
 
-
-
 export const Formulario = ()=>{
 
-
-    
     React.useEffect(()=>{
         getTask()
-  
-
-        
     }, [])
-
-  
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-   
 
     const [tasks, setTasks] = React.useState([])
 
@@ -56,89 +45,58 @@ export const Formulario = ()=>{
       value
       ])
        postForm(value.name, value.description)
-   
-
-  
     }
-    
 
-  
     return(
-  
-            <div style={buttonStyles}>
-            <Button onClick={handleOpen}> + Add Task</Button>
-            <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-              <Box sx={modalStyle}>
-              <form style={{padding:30}} onSubmit={submit}>
-          
-              <h1 style={{textAlign:'center', paddingBottom: 30}}>Add yours tasks</h1>
-               
-                <TextField
-                  id="outlined-multiline-flexible"
-                  label="Name"
-                  name="name" 
-                  fullWidth
-                  margin="normal"
-                  multiline
-                  maxRows={4}
-                  value={value.name}
-                  onChange={handleChange}
-                 />
-                     
-               
-               
-                
-                  <TextField
-                    id="outlined-multiline-static"
-                    fullWidth
-                    label="Description"
-                    name="description" 
-                    onChange={handleChange}
-                    margin="normal"
-                    multiline
-                    rows={2}
-                    
-                  />
+      <div style={buttonStyles}>
+        <Button onClick={handleOpen}> + Add Task</Button>
+        <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <form style={{padding:30}} onSubmit={submit}>
+      
+            <h1 style={{textAlign:'center', paddingBottom: 30}}>Add yours tasks</h1>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Name"
+              name="name" 
+              fullWidth
+              margin="normal"
+              multiline
+              maxRows={4}
+              value={value.name}
+              onChange={handleChange}
+            />
 
-                <InputDate/>
-                  
-                <div>
+            <TextField
+              id="outlined-multiline-static"
+              fullWidth
+              label="Description"
+              name="description" 
+              onChange={handleChange}
+              margin="normal"
+              multiline
+              rows={2}
+            />
 
+            <InputDate/>
 
-                  
-                </div>
-                  <div style={{paddingTop:60}}>
-                
-                 
+            <div>
+              </div>
+                <div style={{paddingTop:60}}>
                   <Button  >Save </Button>
                   <Button onClick={handleClose}>Close</Button>
-
-
-
-                  </div>
-                
-                <div>
-              
-
                 </div>
-           
-
-            </form>
-              </Box>
-            </Modal>
+              <div>
             </div>
-           
-       
-            
-
-    
-
-             
+          </form>
+        </Box>
+        </Modal>
+      </div>    
     )
 }
 

@@ -1,8 +1,4 @@
-
 import axios from "axios";
-
-
-
 
 export const postTask = async(name, description, date) => {
     return new Promise((resolve,reject)=>{
@@ -58,4 +54,43 @@ export const getTask =async() => {
     
     })
 
+}
+
+// Esta es la lógica que tenía en el otro proyecto. (tasks es = que lo que guardo en data "en ProvisionalTasks")
+// En local storage con .splice() podemos borrar / acceder al item en la posición del array "1"
+// PARA BORRAR TENGO QUE HACER UN FILTER DE DATA 
+
+// export const deleteTask = async (id) => {
+
+//     console.log("Id para borrar ", id)
+
+//     swal({
+//       title: "Are you sure?",
+//       text: "Task will be deleted",
+//       icon: "warning",
+//       buttons: true,
+//       dangerMode: true,
+//     })
+//     .then((willDelete) => {
+//       console.log(willDelete);
+//       if (willDelete) {
+//         console.log("Entro")
+//         swal("Poof! Task has been deleted successfully", {
+//           icon: "success",
+//         })
+//         setTasks(tasks.filter((task) => task.id !== id));
+//         axios({
+//             method: 'DELETE',
+//             url: `https://my-json-server.typicode.com/felipeZapata196/lista-tareas/tasks/${id}`,
+           
+//         })
+//         .then (res => window.location.href="/")
+//       }
+//     });
+//     console.log(tasks)
+//   }
+
+// En data ya tenemos todas las tareas. Simplemente tenemos que hacer un filter por id y sacar los datos de la tarea con ese id
+export const editTask = (idTask) => {
+    return idTask
 }
